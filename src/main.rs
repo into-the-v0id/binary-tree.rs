@@ -1,9 +1,10 @@
 // TODO: delete item in tree
-// TODO: use from/into traits
+// TODO: use into/into_iterator traits
 // TODO: optimize/order tree
 
-use std::fmt::Debug;
 use node::*;
+use std::fmt::Debug;
+use std::iter::FromIterator;
 
 mod node;
 
@@ -11,23 +12,46 @@ mod node;
 pub struct BinaryTree<T>(Option<Node<T>>);
 
 impl <T: PartialOrd + Eq + Clone> BinaryTree<T> {
-    pub fn new(data: &[T]) -> BinaryTree<T> {
-        // TODO: Check if consuming array items is possible
-        if let Some(first_value) = data.first() {
+    pub fn new() -> BinaryTree<T> {
+        Default::default()
+    }
+}
+
+impl <T> Default for BinaryTree<T> {
+    fn default() -> Self {
+        BinaryTree(None)
+    }
+}
+
+impl <'a, T: 'a +  PartialOrd + Eq + Clone> FromIterator<&'a T> for BinaryTree<T> {
+    fn from_iter<I: IntoIterator<Item=&'a T>>(iter: I) -> Self {
+        let mut iter = iter.into_iter();
+
+        if let Some(first_value) = iter.next() {
             let mut root_node = Node::new(first_value.clone());
 
-            let mut value_iter = data.iter();
-            value_iter.next();
-            value_iter.for_each(|value| root_node.insert(value.clone()));
+            iter.for_each(|value| root_node.insert(value.clone()));
 
             BinaryTree(Some(root_node))
         } else {
-            BinaryTree::empty()
+            BinaryTree(None)
         }
     }
+}
 
-    pub fn empty() -> BinaryTree<T> {
-        BinaryTree(None)
+impl <T: PartialOrd + Eq> FromIterator<T> for BinaryTree<T> {
+    fn from_iter<I: IntoIterator<Item=T>>(iter: I) -> Self {
+        let mut iter = iter.into_iter();
+
+        if let Some(first_value) = iter.next() {
+            let mut root_node = Node::new(first_value);
+
+            iter.for_each(|value| root_node.insert(value));
+
+            BinaryTree(Some(root_node))
+        } else {
+            BinaryTree(None)
+        }
     }
 }
 
@@ -66,7 +90,7 @@ impl <T: PartialOrd + Eq> BinaryTree<T> {
 }
 
 fn main() {
-    let mut tree = BinaryTree::new(&[10, 13, 15, 3, 5, 7, 17]);
+    let mut tree = BinaryTree::from_iter(&[10, 13, 15, 3, 5, 7, 17]);
 
     println!("{:#?}", tree.contains(&17));
 
