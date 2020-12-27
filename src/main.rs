@@ -1,4 +1,3 @@
-// TODO: allow empty tree
 // TODO: delete item in tree
 // TODO: use from/into traits
 // TODO: optimize/order tree

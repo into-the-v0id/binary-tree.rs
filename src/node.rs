@@ -113,11 +113,11 @@ impl <T: PartialOrd + Eq> Node<T>
     }
 
     fn insert_data<D: PartialOrd + Eq>(node: &mut Node<D>, data: D) {
-        if &node.data == &data {
+        if node.data == data {
             return;
         }
 
-        if &data < &node.data {
+        if data < node.data {
             if let Some(left_node) = node.left_mut() {
                 Self::insert_data(left_node, data);
                 return;
@@ -127,7 +127,7 @@ impl <T: PartialOrd + Eq> Node<T>
             }
         }
 
-        if &data > &mut node.data {
+        if data > node.data {
             if let Some(right_node) = node.right_mut() {
                 Self::insert_data(right_node, data);
                 return;
