@@ -1,3 +1,4 @@
+// TODO: allow empty tree
 // TODO: delete item in tree
 // TODO: optimize/order tree
 
@@ -110,41 +111,11 @@ impl <T> Node<T> {
             Self::invert_node_recursive(right_node);
         }
     }
+
+    pub fn has_children(&self) -> bool {
+        self.left().is_some() || self.right().is_some()
+    }
 }
-
-/* Trait overloading
-
-impl <T> Node<T> where
-    T: Eq + Debug
-{
-    pub fn contains(&self, search: &T) -> bool {
-        Self::node_contains(self, search)
-    }
-
-    fn node_contains<D>(node: &Node<D>, search: &D) -> bool
-        where D: Eq + Debug
-    {
-        println!("[eq] Comparing with data: {:#?}", &node.data);
-
-        if &node.data == search {
-            return true;
-        }
-
-        if let Some(left_node) = node.left() {
-            if Self::node_contains(left_node, search) {
-                return true;
-            }
-        }
-
-        if let Some(right_node) = node.right() {
-            if Self::node_contains(right_node, search) {
-                return true;
-            }
-        }
-
-        false
-    }
-}*/
 
 impl <T: PartialOrd + Eq> Node<T>
 {
@@ -206,6 +177,74 @@ impl <T: PartialOrd + Eq> Node<T>
         }
     }
 }
+
+/* Delete
+
+impl <T: PartialOrd + Eq + Clone> Node<T> {
+    pub fn delete(&mut self, data: &T) {
+        Self::delete_data(self, data)
+    }
+
+    fn delete_data<D: PartialOrd + Eq + Clone>(node: &mut Node<D>, data: &D) {
+        if &node.data == data {
+            Self::pull_data_from_children(node);
+            return;
+        }
+
+        if data < &node.data {
+            if let Some(left_node) = node.left_mut() {
+                if &left_node.data == data && ! left_node.has_children() {
+                    node.unset_left();
+                    return;
+                }
+
+                Self::delete_data(left_node, data);
+                return;
+            }
+        }
+
+        if data > &node.data {
+            if let Some(right_node) = node.right_mut() {
+                if &right_node.data == data && ! right_node.has_children() {
+                    node.unset_right();
+                    return;
+                }
+
+                Self::delete_data(right_node, data);
+                return;
+            }
+        }
+    }
+
+    fn pull_data_from_children<D: Clone>(node: &mut Node<D>) {
+        let child_node = node.right().or_else(|| node.left());
+
+        if let Some(child_node) = child_node {
+            // Copy data from child
+            node.data = child_node.data.clone();
+        } else {
+            // Delete end-node
+            if node.right().is_some() {
+                node.unset_right();
+            } else if node.left().is_some() {
+                node.unset_left();
+            }
+        }
+
+        if node.right().is_some() {
+            let child_node = node.right_mut().unwrap();
+            Self::pull_data_from_children(child_node);
+            return;
+        }
+
+        if node.left().is_some() {
+            let child_node = node.left_mut().unwrap();
+            Self::pull_data_from_children(child_node);
+            return;
+        }
+    }
+}
+*/
 
 fn main() {
     let mut tree = BinaryTree::try_new(&[10, 13, 15, 3, 5, 7, 17])
