@@ -11,7 +11,7 @@ mod node;
 #[derive(Clone, Debug)]
 pub struct BinaryTree<T>(Option<Node<T>>);
 
-impl <T: PartialOrd + Eq + Clone> BinaryTree<T> {
+impl <T> BinaryTree<T> {
     pub fn new() -> BinaryTree<T> {
         Default::default()
     }
