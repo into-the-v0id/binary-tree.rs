@@ -21,6 +21,10 @@ impl <T> Node<T> {
         &self.data
     }
 
+    pub fn data_mut(&mut self) -> &mut T {
+        &mut self.data
+    }
+
     fn set_left(&mut self, node: Node<T>) {
         self.left = Box::new(Some(node));
     }
@@ -33,7 +37,7 @@ impl <T> Node<T> {
         self.left.as_ref().as_ref()
     }
 
-    fn left_mut(&mut self) -> Option<&mut Node<T>> {
+    pub fn left_mut(&mut self) -> Option<&mut Node<T>> {
         self.left.as_mut().as_mut()
     }
 
@@ -49,7 +53,7 @@ impl <T> Node<T> {
         self.right.as_ref().as_ref()
     }
 
-    fn right_mut(&mut self) -> Option<&mut Node<T>> {
+    pub fn right_mut(&mut self) -> Option<&mut Node<T>> {
         self.right.as_mut().as_mut()
     }
 
