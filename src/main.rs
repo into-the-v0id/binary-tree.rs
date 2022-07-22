@@ -2,6 +2,8 @@
 // TODO: use into/into_iterator traits
 // TODO: optimize/order tree
 
+#![allow(dead_code)]
+
 use tree::BinaryTree;
 use std::iter::FromIterator;
 

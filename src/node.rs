@@ -124,21 +124,21 @@ impl <T: PartialOrd + Eq> Node<T>
         if data < node.data {
             if let Some(left_node) = node.left_mut() {
                 Self::insert_data(left_node, data);
-                return;
             } else {
                 node.set_left(Node::new(data));
-                return;
             }
+
+            return;
         }
 
         if data > node.data {
             if let Some(right_node) = node.right_mut() {
                 Self::insert_data(right_node, data);
-                return;
             } else {
                 node.set_right(Node::new(data));
-                return;
             }
+
+            return;
         }
     }
 }
