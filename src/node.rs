@@ -3,8 +3,8 @@ use std::fmt::Debug;
 #[derive(Clone, Debug)]
 pub struct Node<T> {
     data: T,
-    left: Box<Option<Node<T>>>,
-    right: Box<Option<Node<T>>>,
+    left: Option<Box<Node<T>>>,
+    right: Option<Box<Node<T>>>,
 }
 
 #[allow(dead_code)]
@@ -12,8 +12,8 @@ impl <T> Node<T> {
     pub fn new(data: T) -> Node<T> {
         Node {
             data,
-            left: Box::new(None),
-            right: Box::new(None),
+            left: None,
+            right: None,
         }
     }
 
@@ -26,35 +26,35 @@ impl <T> Node<T> {
     }
 
     fn set_left(&mut self, node: Node<T>) {
-        self.left = Box::new(Some(node));
+        self.left = Some(Box::new(node));
     }
 
     fn unset_left(&mut self) {
-        self.left = Box::new(None);
+        self.left = None;
     }
 
     pub fn left(&self) -> Option<&Node<T>> {
-        self.left.as_ref().as_ref()
+        self.left.as_ref().map(|node| node.as_ref())
     }
 
     pub fn left_mut(&mut self) -> Option<&mut Node<T>> {
-        self.left.as_mut().as_mut()
+        self.left.as_mut().map(|node| node.as_mut())
     }
 
     fn set_right(&mut self, node: Node<T>) {
-        self.right = Box::new(Some(node));
+        self.right = Some(Box::new(node));
     }
 
     fn unset_right(&mut self) {
-        self.right = Box::new(None);
+        self.right = None;
     }
 
     pub fn right(&self) -> Option<&Node<T>> {
-        self.right.as_ref().as_ref()
+        self.right.as_ref().map(|node| node.as_ref())
     }
 
     pub fn right_mut(&mut self) -> Option<&mut Node<T>> {
-        self.right.as_mut().as_mut()
+        self.right.as_mut().map(|node| node.as_mut())
     }
 
     pub fn invert(&mut self) {
