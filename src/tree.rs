@@ -3,21 +3,28 @@ use std::fmt::Debug;
 use std::iter::FromIterator;
 
 #[derive(Clone, Debug)]
-pub struct BinaryTree<T>(Option<Node<T>>);
+pub struct BinaryTree<T>(Option<Node<T>>)
+    where T: PartialOrd + PartialEq;
 
-impl <T> BinaryTree<T> {
+impl <T> BinaryTree<T>
+    where T: PartialOrd + PartialEq
+{
     pub fn new() -> BinaryTree<T> {
         Default::default()
     }
 }
 
-impl <T> Default for BinaryTree<T> {
+impl <T> Default for BinaryTree<T>
+    where T: PartialOrd + PartialEq
+{
     fn default() -> Self {
         BinaryTree(None)
     }
 }
 
-impl <'a, T: 'a + PartialOrd + Eq + Clone> FromIterator<&'a T> for BinaryTree<T> {
+impl <'a, T> FromIterator<&'a T> for BinaryTree<T>
+    where T: 'a + PartialOrd + PartialEq + Clone
+{
     fn from_iter<I: IntoIterator<Item=&'a T>>(iter: I) -> Self {
         let mut iter = iter.into_iter();
 
@@ -33,7 +40,9 @@ impl <'a, T: 'a + PartialOrd + Eq + Clone> FromIterator<&'a T> for BinaryTree<T>
     }
 }
 
-impl <'a, T: 'a + PartialOrd + Eq + Clone> FromIterator<&'a mut T> for BinaryTree<T> {
+impl <'a, T> FromIterator<&'a mut T> for BinaryTree<T>
+    where T: 'a + PartialOrd + PartialEq + Clone
+{
     fn from_iter<I: IntoIterator<Item=&'a mut T>>(iter: I) -> Self {
         let mut iter = iter.into_iter();
 
@@ -49,7 +58,9 @@ impl <'a, T: 'a + PartialOrd + Eq + Clone> FromIterator<&'a mut T> for BinaryTre
     }
 }
 
-impl <T: PartialOrd + Eq> FromIterator<T> for BinaryTree<T> {
+impl <T> FromIterator<T> for BinaryTree<T>
+    where T: PartialOrd + PartialEq
+{
     fn from_iter<I: IntoIterator<Item=T>>(iter: I) -> Self {
         let mut iter = iter.into_iter();
 
@@ -65,7 +76,9 @@ impl <T: PartialOrd + Eq> FromIterator<T> for BinaryTree<T> {
     }
 }
 
-impl <T> BinaryTree<T> {
+impl <T> BinaryTree<T>
+    where T: PartialOrd + PartialEq
+{
     pub fn is_empty(&self) -> bool {
         self.root().is_none()
     }
@@ -89,7 +102,9 @@ impl <T> BinaryTree<T> {
     }
 }
 
-impl <T: PartialOrd + Eq> BinaryTree<T> {
+impl <T> BinaryTree<T>
+    where T: PartialOrd + PartialEq
+{
     pub fn contains(&self, search: &T) -> bool {
         if let Some(root_node) = self.root() {
             root_node.contains(search)

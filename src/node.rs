@@ -1,14 +1,18 @@
 use std::fmt::Debug;
 
 #[derive(Clone, Debug)]
-pub struct Node<T> {
+pub struct Node<T>
+    where T: PartialOrd + PartialEq
+{
     data: T,
     left: Option<Box<Node<T>>>,
     right: Option<Box<Node<T>>>,
 }
 
 #[allow(dead_code)]
-impl <T> Node<T> {
+impl <T> Node<T>
+    where T: PartialOrd + PartialEq
+{
     pub fn new(data: T) -> Node<T> {
         Node {
             data,
@@ -65,7 +69,9 @@ impl <T> Node<T> {
         Self::invert_node_recursive(self);
     }
 
-    fn invert_node_recursive<D>(node: &mut Node<D>) {
+    fn invert_node_recursive<D>(node: &mut Node<D>)
+        where D: PartialOrd + PartialEq
+    {
         node.invert();
 
         if let Some(left_node) = node.left_mut() {
@@ -82,13 +88,16 @@ impl <T> Node<T> {
     }
 }
 
-impl <T: PartialOrd + Eq> Node<T>
+impl <T> Node<T>
+    where T: PartialOrd + PartialEq
 {
     pub fn contains(&self, search: &T) -> bool {
         Self::node_contains(self, search)
     }
 
-    fn node_contains<D: PartialOrd + Eq>(node: &Node<D>, search: &D) -> bool {
+    fn node_contains<D>(node: &Node<D>, search: &D) -> bool
+        where D: PartialOrd + PartialEq
+    {
         if &node.data == search {
             return true;
         }
@@ -116,7 +125,9 @@ impl <T: PartialOrd + Eq> Node<T>
         Self::insert_data(self, data)
     }
 
-    fn insert_data<D: PartialOrd + Eq>(node: &mut Node<D>, data: D) {
+    fn insert_data<D>(node: &mut Node<D>, data: D)
+        where D: PartialOrd + PartialEq
+    {
         if node.data == data {
             return;
         }
